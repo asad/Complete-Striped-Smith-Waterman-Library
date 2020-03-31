@@ -241,9 +241,9 @@ def main(args):
         nFlag = 2
 # print sam head
     if args.bSam and args.bHeader and args.bPath:
-        print '@HD\tVN:1.4\tSO:queryname'
+        print ('@HD\tVN:1.4\tSO:queryname')
         for sRId,sRSeq,_ in read(args.target):
-            print '@SQ\tSN:{}\tLN:{}'.format(sRId, len(sRSeq))
+            print ('@SQ\tSN:{}\tLN:{}'.format(sRId, len(sRSeq)))
     elif args.bSam and not args.bPath:
         print >> sys.stderr, 'SAM format output is only available together with option -c.\n'
         args.bSam = False
@@ -289,66 +289,66 @@ def main(args):
 
 # print results
             if not args.bSam:
-                print 'target_name: {}\nquery_name: {}\noptimal_alignment_score: {}\t'.format(sRId, sQId, resPrint[0]),
+                print ('target_name: {}\nquery_name: {}\noptimal_alignment_score: {}\t'.format(sRId, sQId, resPrint[0])),
                 if resPrint[1] > 0:
-                    print 'suboptimal_alignment_score: {}\t'.format(resPrint[1]),
+                    print ('suboptimal_alignment_score: {}\t'.format(resPrint[1])),
                 if strand == 0:
-                    print 'strand: +\t',
+                    print ('strand: +\t'),
                 else: 
-                    print 'strand: -\t',
+                    print ('strand: -\t'),
                 if resPrint[2] + 1:
-                    print 'target_begin: {}\t'.format(resPrint[2] + 1),
-                print 'target_end: {}\t'.format(resPrint[3] + 1),
+                    print ('target_begin: {}\t'.format(resPrint[2] + 1)),
+                print ('target_end: {}\t'.format(resPrint[3] + 1)),
                 if resPrint[4] + 1:
-                    print 'query_begin: {}\t'.format(resPrint[4] + 1),
-                print 'query_end: {}\n'.format(resPrint[5] + 1)
+                    print ('query_begin: {}\t'.format(resPrint[4] + 1)),
+                print ('query_end: {}\n'.format(resPrint[5] + 1))
                 if resPrint[-2] > 0:
                     n1 = 1 + resPrint[2]
                     n2 = min(60,len(sR)) + resPrint[2] - sR.count('-',0,60)
                     n3 = 1 + resPrint[4]
                     n4 = min(60,len(sQ)) + resPrint[4] - sQ.count('-',0,60)
                     for i in range(0, len(sQ), 60):
-                        print 'Target:{:>8}\t{}\t{}'.format(n1, sR[i:i+60], n2)
+                        print ('Target:{:>8}\t{}\t{}'.format(n1, sR[i:i+60], n2))
                         n1 = n2 + 1
                         n2 = n2 + min(60,len(sR)-i-60) - sR.count('-',i+60,i+120)
 
-                        print '{: ^15}\t{}'.format('', sA[i:i+60])
+                        print ('{: ^15}\t{}'.format('', sA[i:i+60]))
 
-                        print 'Query:{:>9}\t{}\t{}\n'.format(n3, sQ[i:i+60], n4)
+                        print ('Query:{:>9}\t{}\t{}\n'.format(n3, sQ[i:i+60], n4))
                         n3 = n4 + 1
                         n4 = n4 + min(60,len(sQ)-i-60) - sQ.count('-',i+60,i+120)
             else:
-                print "{}\t".format(sQId),
+                print ("{}\t".format(sQId)),
                 if resPrint[0] == 0:
-                    print "4\t*\t0\t255\t*\t*\t0\t0\t*\t*",
+                    print ("4\t*\t0\t255\t*\t*\t0\t0\t*\t*"),
                 else:
                     mapq = int(-4.343 * math.log(1-abs(resPrint[0]-resPrint[1])/float(resPrint[0])))
                     mapq = int(mapq + 4.99);
                     if mapq >= 254:
                         mapq = 254
                     if strand == 1:
-                        print '16\t',
+                        print ('16\t'),
                     else:
-                        print '0\t',
-                    print '{}\t{}\t{}\t'.format(sRId, resPrint[2]+1, mapq),
-                    print sCigar,
-                    print '\t*\t0\t0\t',
-                    print sQSeq[resPrint[4]:resPrint[5]+1] if strand==0 else sQRcSeq[resPrint[4]:resPrint[5]+1],
-                    print '\t',
+                        print ('0\t'),
+                    print ('{}\t{}\t{}\t'.format(sRId, resPrint[2]+1, mapq)),
+                    print (sCigar),
+                    print ('\t*\t0\t0\t'),
+                    print (sQSeq[resPrint[4]:resPrint[5]+1]) if strand==0 else sQRcSeq[resPrint[4]:resPrint[5]+1],
+                    print ('\t'),
                     if sQQual:
                         if strand == 0:
-                            print sQQual[resPrint[4]:resPrint[5]+1],
+                            print (sQQual[resPrint[4]:resPrint[5]+1]),
                         else:
-                            print sQQual[-resPrint[4]-1:-resPrint[5]-1:-1]
+                            print (sQQual[-resPrint[4]-1:-resPrint[5]-1:-1])
                     else:
-                        print '*',
+                        print ('*'),
 
-                    print '\tAS:i:{}'.format(resPrint[0]),
-                    print '\tNM:i:{}\t'.format(len(sA)-sA.count('|')),
+                    print ('\tAS:i:{}'.format(resPrint[0])),
+                    print ('\tNM:i:{}\t'.format(len(sA)-sA.count('|'))),
                     if resPrint[1] > 0:
-                        print 'ZS:i:{}'.format(resPrint[1])
+                        print ('ZS:i:{}'.format(resPrint[1]))
                     else:
-                        print
+                        print ('')
 
 
         ssw.init_destroy(qProfile)
@@ -382,3 +382,5 @@ if __name__ == '__main__':
     main(args)
     t2 = ti.default_timer()
     print >> sys.stderr, 'CPU time: {} seconds'.format(t2 - t1)
+
+
